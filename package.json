@@ -1,0 +1,12 @@
+{
+  "name": "bunapp",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --hot src/main.ts",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/main.ts --outfile dist/app"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
