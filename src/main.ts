@@ -1,45 +1,52 @@
-import { Created, InternalServerError, MethodNotAllowed, NoContent, NotFound, Ok } from './responses'
-import { database } from './database'
+import { database } from "./database";
+import {
+	Created,
+	InternalServerError,
+	MethodNotAllowed,
+	NoContent,
+	NotFound,
+	Ok,
+} from "./responses";
 
 (async function main() {
-	await database.connect()
+	await database.connect();
 
 	const server = Bun.serve({
-		port: 4321,
+		port: Bun.env.PORT ?? 4321,
 		routes: {
-			'/todos': {
+			"/todos": {
 				async GET() {
-					const todos = await database.getAll()
-					return Ok({ todos, count: todos.length })
+					const todos = await database.getAll();
+					return Ok({ todos, count: todos.length });
 				},
 				async POST(req) {
-					const { title } = await req.json()
-					const todo = await database.create(title)
-					return Created(todo)
-				}
+					const { title } = await req.json();
+					const todo = await database.create(title);
+					return Created(todo);
+				},
 			},
-			'/todos/:id': {
+			"/todos/:id": {
 				async GET(req) {
-					const todo = await database.get(req.params.id)
-					if (!todo) return NotFound()
-					return Ok(todo)
+					const todo = await database.get(req.params.id);
+					if (!todo) return NotFound();
+					return Ok(todo);
 				},
 				async PUT(req) {
-					const { title, done } = await req.json()
-					const todo = await database.update(req.params.id, { title, done })
-					if (!todo) return NotFound()
-					return Ok(todo)
+					const { title, done } = await req.json();
+					const todo = await database.update(req.params.id, { title, done });
+					if (!todo) return NotFound();
+					return Ok(todo);
 				},
 				async DELETE(req) {
-					if (!(await database.exists(req.params.id))) return NotFound()
-					await database.remove(req.params.id)
-					return NoContent()
-				}
+					if (!(await database.exists(req.params.id))) return NotFound();
+					await database.remove(req.params.id);
+					return NoContent();
+				},
 			},
 		},
-		fetch() { return MethodNotAllowed() },
+		fetch: () => MethodNotAllowed(),
 		error: InternalServerError,
-	})
+	});
 
-	console.log(`server up http://${server.hostname}:${server.port}`)
-})()
+	console.log(`server up http://${server.hostname}:${server.port}`);
+})();
