@@ -21,3 +21,22 @@ bun compile
 ```
 
 execute `./dist/app`
+
+## Docker
+
+Build the image:
+```sh
+docker build -t bun-minimal-api .
+```
+
+Run the container:
+```sh
+docker run -p 4321:4321 -v ./path/to/data:/app/data bun-minimal-api
+```
+
+open http://localhost:4321
+
+### Environment Variables
+
+- `PORT`: Server port (default: 4321)
+- `DATABASE_URL`: SQLite database URL (default: sqlite:///app/data/sqlite.db)

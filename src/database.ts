@@ -12,7 +12,7 @@ type ToDoRecord = {
 	done: 0 | 1;
 };
 
-const sqlite = new SQL(Bun.env.DATABASE_URL ?? "sqlite://myapp.db");
+const sqlite = new SQL(Bun.env.DATABASE_URL ?? "sqlite://sqlite.db");
 
 export const createStorage = () => {
 	let initialized: Promise<void> | null = null;
